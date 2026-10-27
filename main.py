@@ -53,10 +53,22 @@ def main():
             print(f"\nResultados calculados para '{proceso}':")
             print(f"   • Consumo total: {consumo:.2f} Wh")
             print(f"   • Huella de carbono estimada: {huella:.4f} g CO2")
+            
+            with open("auditorias.csv", mode="a", encoding="utf-8") as archivo:
+                archivo.write(f"{proceso},{potencia},{horas},{iteraciones},{consumo:.2f},{huella:.4f}\n")
+            print("💾 Registro guardado con éxito en 'auditorias.csv'.")
 
         elif opcion == "2":
-            print("\n--- CONSULTAR HISTÓRICOS ---")
-            print("La consulta de históricos está pendiente de implementar.")
+            print("\n================ HISTORIAL DE AUDITORÍAS ================")
+            try:
+                # Abre el archivo en modo lectura ("r") y muestra su contenido
+                with open("auditorias.csv", mode="r", encoding="utf-8") as archivo:
+                    contenido = archivo.read()
+                    print(contenido)
+                    
+            except FileNotFoundError:
+                # Si todavía no existe el archivo, evitamos que el programa falle
+                print("ℹ️ Aún no existen registros. Realiza una auditoría primero.")
 
         elif opcion == "3":
             print("\nSaliendo de EcoAudit CLI. ¡Hasta pronto!")
