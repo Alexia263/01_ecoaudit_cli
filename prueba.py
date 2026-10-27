@@ -1,1 +1,0 @@
-print("¡Hola, EducaAndOS! Mi primer script en Python funciona correctamente.")
