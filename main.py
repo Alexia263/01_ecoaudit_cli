@@ -2,43 +2,69 @@
 # EcoAudit CLI - Módulo Principal
 # Autores: [Alexia] & [Mariangeles] & [Natalia]
 # =====================================================================
-while True:
-    print("\n=========================================")
-    print(" 🌿 ECOAUDIT CLI - MENÚ PRINCIPAL 🌿 ")
-    print("=========================================")
-    print("1. Realizar nueva auditoría")
-    print("2. Consultar histórico")
-    print("3. Salir")
-    entrada = input("\nSeleccione una opción (1-3): ").strip()
 
-    try:
-        opcion = int(entrada)
-    except ValueError:
-        print("⚠️ Error: Debe introducir un número entero.")
-        continue
+from calculadora import estimar_consumo_wh, calcular_huella_co2
 
-    try:
-        opcion = int(entrada)
-    except ValueError:
-        print("⚠️ Error: Debe introducir un número entero.")
-        continue
-
-    if opcion == 1:
-        print("\n[OPCIÓN 1] Iniciando proceso de auditoría...")
+def solicitar_numero_positivo(mensaje: str, tipo=float):
+    """Solicita un número positivo y controla los errores de entrada."""
+    while True:
         try:
-            num_iter = int(input("Introduce número de iteraciones: ").strip())
-            if num_iter <= 0:
-                print("⚠️ El valor debe ser mayor que cero.")
-            else:
-                print(f"✔️ Configurado con éxito para {num_iter} iteraciones.")
+            valor = tipo(input(mensaje))
+
+            if valor <= 0:
+                print("Error: introduce un número mayor que cero.")
+                continue
+
+            return valor
+
         except ValueError:
-            print("⚠️ Error de formato: debe introducir un número entero.")
+            print("Error: introduce un número válido.")
 
-    elif opcion == 2:
-        print("\n[OPCIÓN 2] Consultando registros históricos...")
-    elif opcion == 3:
-        print("\nSaliendo de EcoAudit CLI. ¡Hasta pronto!")
-    break
-else:
-        print("⚠️ Opción no válida. Elija un número entre 1 y 3.")
 
+def main():
+    """Muestra el menú principal y ejecuta las opciones."""
+    while True:
+        print("\n========== ECOAUDIT CLI ==========")
+        print("1. Realizar auditoría energética")
+        print("2. Consultar históricos")
+        print("3. Salir")
+
+        opcion = input("Selecciona una opción: ").strip()
+
+        if opcion == "1":
+            print("\n--- AUDITORÍA ENERGÉTICA ---")
+
+            proceso = input("Nombre del equipo/proceso: ").strip()
+
+            if not proceso:
+                print("Error: el nombre no puede estar vacío.")
+                continue
+
+            potencia = solicitar_numero_positivo("Potencia consumida en Vatios (W): ")
+
+            horas = solicitar_numero_positivo("Horas de uso diario: ")
+
+            iteraciones = solicitar_numero_positivo("Número de iteraciones del proceso: ", int)
+
+            consumo = estimar_consumo_wh(potencia, horas, iteraciones)
+
+            huella = calcular_huella_co2(consumo)
+
+            print(f"\nResultados calculados para '{proceso}':")
+            print(f"   • Consumo total: {consumo:.2f} Wh")
+            print(f"   • Huella de carbono estimada: {huella:.4f} g CO2")
+
+        elif opcion == "2":
+            print("\n--- CONSULTAR HISTÓRICOS ---")
+            print("La consulta de históricos está pendiente de implementar.")
+
+        elif opcion == "3":
+            print("\nSaliendo de EcoAudit CLI. ¡Hasta pronto!")
+            break
+
+        else:
+            print("Opción no válida. Selecciona 1, 2 o 3.")
+
+
+if __name__ == "__main__":
+    main()
