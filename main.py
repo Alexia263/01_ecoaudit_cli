@@ -45,6 +45,15 @@ def main():
             horas = solicitar_numero_positivo("Horas de uso diario: ")
 
             iteraciones = solicitar_numero_positivo("Número de iteraciones del proceso: ", int)
+            print("\nIniciando simulación ciclo a ciclo...")
+            consumo_ciclo = estimar_consumo_wh(potencia, horas, 1)
+            consumo_acumulado = 0.0
+            ciclo = 1
+
+            while ciclo <= iteraciones:
+                consumo_acumulado = consumo_acumulado + consumo_ciclo
+                print(f"   [Ciclo {ciclo}] Consumo acumulado parcial: {consumo_acumulado:.2f} Wh")
+                ciclo = ciclo + 1
 
             consumo = estimar_consumo_wh(potencia, horas, iteraciones)
 
@@ -56,7 +65,7 @@ def main():
             
             with open("auditorias.csv", mode="a", encoding="utf-8") as archivo:
                 archivo.write(f"{proceso},{potencia},{horas},{iteraciones},{consumo:.2f},{huella:.4f}\n")
-            print("💾 Registro guardado con éxito en 'auditorias.csv'.")
+            print(" Registro guardado con éxito en 'auditorias.csv'.")
 
         elif opcion == "2":
             print("\n================ HISTORIAL DE AUDITORÍAS ================")
